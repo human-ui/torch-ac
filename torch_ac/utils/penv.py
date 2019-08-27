@@ -51,3 +51,25 @@ class ParallelEnv(gym.Env):
 
     def render(self):
         raise NotImplementedError
+
+class MultiEnv(gym.Env):
+    """Run multiple environments on single process"""
+
+    def __init__(self, envs):
+        assert len(envs) >= 1, "No environment given."
+
+        self.envs = envs
+        self.observation_space = self.envs[0].observation_space
+        self.action_space = self.envs[0].action_space
+
+    def reset(self):
+        results = [env.reset() for env in self.envs]
+        return results
+
+    def step(self, actions):
+        results = [env.step(action) for env, action in zip(self.envs, actions)]
+        results = zip(*results)
+        return results
+
+    def render(self):
+        raise NotImplementedError

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import torch
 
 from torch_ac.format import default_preprocess_obss
-from torch_ac.utils import DictList, ParallelEnv
+from torch_ac.utils import DictList, ParallelEnv, MultiEnv
 
 class BaseAlgo(ABC):
     """The base class for RL algorithms."""
@@ -45,7 +45,7 @@ class BaseAlgo(ABC):
 
         # Store parameters
 
-        self.env = ParallelEnv(envs)
+        self.env = MultiEnv(envs)
         self.acmodel = acmodel
         self.device = device
         self.num_frames_per_proc = num_frames_per_proc
